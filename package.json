@@ -1,0 +1,30 @@
+{
+  "name": "scriptsdk",
+  "version": "0.0.1",
+  "description": "Use certain Endstone features directly on your add-ons. By using a JS file on your add-ons and the Endstone plugin.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc lib/ScriptSDK.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bedrock-Developpeur-Francophone/ScriptSDK.git"
+  },
+  "author": "",
+  "license": "GPL-2.0-only",
+  "bugs": {
+    "url": "https://github.com/Bedrock-Developpeur-Francophone/ScriptSDK/issues"
+  },
+  "homepage": "https://github.com/Bedrock-Developpeur-Francophone/ScriptSDK#readme",
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@minecraft/server": "^2.4.0-beta.1.21.123-stable"
+  }
+}

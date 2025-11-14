@@ -1,0 +1,3 @@
+endstone
+pipx
+setuptools

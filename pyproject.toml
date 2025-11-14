@@ -1,0 +1,11 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "endstone-scriptsdk"
+version = "0.0.1"
+description = "Use certain Endstone features directly on your add-ons. By using a JS file on your add-ons and the Endstone plugin."
+
+[project.entry-points."endstone"]
+color-plugin = "endstone_scriptsdk:ScriptSDK"
