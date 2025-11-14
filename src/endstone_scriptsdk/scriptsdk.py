@@ -12,7 +12,7 @@ class ScriptSDK(Plugin):
     prefix = f"{Fore.YELLOW}[Script{Fore.BLUE}SDK] {Fore.RESET}"
 
     def on_load(self):
-        pass
+        self.logger.info(f'Loaded !')
     
     def on_enable(self):
         self.register_events(self)

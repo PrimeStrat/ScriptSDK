@@ -11,4 +11,4 @@ dependencies = [
 ]
 
 [project.entry-points."endstone"]
-color-plugin = "endstone_scriptsdk:ScriptSDK"
+scriptsdk = "endstone_scriptsdk:ScriptSDK"
