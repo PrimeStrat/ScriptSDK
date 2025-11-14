@@ -1,4 +1,4 @@
 endstone
 pipx
 setuptools
-colorama==0.4.2
+coloama>=0.4.6

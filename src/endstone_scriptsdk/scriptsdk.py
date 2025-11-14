@@ -9,7 +9,7 @@ class ScriptSDK(Plugin):
     website = "https://discord.gg/kQU9p4ZHbR"
 
     plugin_mc_prefix = "§e[Script§1SDK] §r"
-    prefix = f"{Fore.YELLOW}[Script{Fore.BLUE}SDK] {Fore.RESET}"
+    prefix = f"{Fore.YELLOW}Script{Fore.BLUE}SDK{Fore.RESET}"
 
     def on_load(self):
         self.logger.info(f'Loaded !')
