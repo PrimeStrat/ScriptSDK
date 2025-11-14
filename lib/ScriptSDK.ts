@@ -55,8 +55,8 @@ class ScriptSDK {
                 resolve(null);
             }
 
-            this.waitingData[id] = (data) => {
-                const result : string[] = data.split('#');
+            this.waitingData[id] = (data : string) => {
+                const result : string[] = data.split('#', 3);
                 if(result.length == 3) {
                     resolve({
                         success: result[0] == 'true',
