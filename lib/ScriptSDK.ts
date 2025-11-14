@@ -58,11 +58,11 @@ class ScriptSDK {
             this.waitingData[id] = (data : string) => {
                 const regex = /^([a-z]*)#(\d{3})#(.*)$/gm; // You're not good at regular expressions, go to -> https://regex101.com/ ;D
                 let m = regex.exec(data);
-                if(m && m.length == 3) {
+                if(m && m.length == 4) {
                     resolve({
-                        success: m[0] == 'true',
-                        code: parseInt(m[1]),
-                        result: m[2]
+                        success: m[1] == 'true',
+                        code: parseInt(m[2]),
+                        result: m[3]
                     });
                 }
             }
