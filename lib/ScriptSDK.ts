@@ -6,6 +6,13 @@ export type WaitingData = {
 
 export type actions = 'getIp';
 
+export class NotFoundException extends Error {
+    constructor(msg: string) {
+        super(msg);
+        this.name = 'NotFoundException';
+    }
+}
+
 class ScriptSDK {
 
     private waitingData: WaitingData = {};
@@ -37,7 +44,7 @@ class ScriptSDK {
         }
     }
 
-    private async send(action: actions, body: string = '', hasResult: boolean = false) {
+    private async send(action: actions, body: string = '', hasResult: boolean = false) : Promise<{success: boolean, code: number, result: string} | null> {
         return new Promise((resolve) => {
 
             const id = this.generateId();
@@ -49,12 +56,29 @@ class ScriptSDK {
             }
 
             this.waitingData[id] = (data) => {
-                resolve(data);
+                const result : string[] = data.split('#');
+                if(result.length == 3) {
+                    resolve({
+                        success: result[0] == 'true',
+                        code: parseInt(result[1]),
+                        result: result[2]
+                    });
+                }
             }
         });
     }
 
-
+    /**
+     * Return player ip.
+     */
+    async getIp(playerName: string) {
+        const result = await this.send('getIp', playerName, true);
+        if(result?.success) {
+            return result.result;
+        }
+        if(result?.code == 404) throw new NotFoundException(result?.result);
+        throw new Error(result?.result);
+    }
 }
 
 export default new ScriptSDK();

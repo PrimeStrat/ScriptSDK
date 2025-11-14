@@ -12,7 +12,7 @@ class EventHandler:
 
     def send_script_event(self, uuid, body):
         self.plugin.server.dispatch_command(self.plugin.server.command_sender, f'scriptevent scriptsdkresult:{uuid} {body}')
-        self.logger.info(f'Result send ! ({Fore.CYAN}{uuid}{Fore.RESET})')
+        self.logger.info(f'Result send ! ({Fore.CYAN}{uuid}{Fore.RED} => {Fore.GREEN}{body}{Fore.RESET})')
 
     @event_handler
     def on_script_message(self, event : ScriptMessageEvent):
@@ -24,12 +24,17 @@ class EventHandler:
             event.cancel()
             uuid = parsed_id[1]
             action = parsed_id[2]
-            self.logger.info(f'Valid message received! ({Fore.CYAN}{uuid}{Fore.RED} -> {Fore.YELLOW}{action}{Fore.RESET})')
+            self.logger.info(f'Valid message received! ({Fore.CYAN}{uuid}{Fore.RED} -> {Fore.YELLOW}{action}{Fore.RED} => {Fore.GREEN}{message}{Fore.RESET})')
+
+            # --> Result Body : success:boolean#code:number#result:any
 
             try:
                 match action:
                     case 'getIp':
-                        self.send_script_event(uuid, 'ok')
+                        player = self.plugin.server.get_player(message)
+                        if not player:
+                            return self.send_script_event(uuid, 'false#404#player not found')
+                        return self.send_script_event(uuid, f'true#200#{player.address.hostname}')
 
             except Exception as e:
                 self.logger.error(f'Error during processing! ({e})')
