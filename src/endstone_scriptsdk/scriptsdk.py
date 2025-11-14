@@ -1,5 +1,6 @@
 from endstone.plugin import Plugin
 from colorama import Fore
+from endstone_scriptsdk.handler import EventHandler
 
 class ScriptSDK(Plugin):
     api_version = "0.10"
@@ -11,8 +12,11 @@ class ScriptSDK(Plugin):
     plugin_mc_prefix = "§e[Script§1SDK] §r"
     prefix = f"{Fore.YELLOW}Script{Fore.BLUE}SDK{Fore.RESET}"
 
+    
+
     def on_load(self):
         self.logger.info(f'Loaded !')
     
     def on_enable(self):
         self.register_events(self)
+        self.handler = EventHandler(self)
