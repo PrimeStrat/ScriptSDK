@@ -27,6 +27,8 @@ class ScriptSDK(Plugin):
         }
     }
 
+    isDebug = False
+
     def on_load(self):
         self.logger.set_level(self.logger.INFO)
         self.logger.info(f'Loaded !')
@@ -43,10 +45,12 @@ class ScriptSDK(Plugin):
     def on_command(self, sender, command, args):
 
         if command.name == "debug":
-            if self.logger.level == self.logger.INFO:
+            if not self.isDebug:
                 self.logger.set_level(self.logger.DEBUG)
+                isDebug = True
                 sender.send_message(self.plugin_mc_prefix+"§aDebug enabled!")
             else:
+                isDebug = False
                 self.logger.set_level(self.logger.INFO)
                 sender.send_message(self.plugin_mc_prefix+"§cDebug disabled!")
 
