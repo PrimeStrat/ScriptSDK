@@ -1,6 +1,6 @@
 endstone
 pipx
 setuptools
-coloama
+coloarma
 bstream == 1.0.1
 bedrock_protocol == 0.0.1
