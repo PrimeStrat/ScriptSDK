@@ -1,7 +1,7 @@
 # ScriptSDK
 
 [![License](https://img.shields.io/badge/License-GPL--2.0-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.0.1-green.svg)](package.json)
+[![Version](https://img.shields.io/badge/version-0.0.8-green.svg)](package.json)
 
 Use certain Endstone features directly in your Bedrock add-ons through a JavaScript API. ScriptSDK bridges the gap between Minecraft Bedrock add-ons and Endstone plugin capabilities.
 
@@ -15,27 +15,45 @@ ScriptSDK is a dual-component system:
 
 ## ✨ Features
 
-- getIp(playerName) -> string: Get player ip address.
-- setBossBar(player, title, color, style, pourcent):  Assigns a boss bar to a player.
-- setPlayerNameForPlayer(target, player, newName): Configures the player name for the target. (Please note that this function must be used in a loop, otherwise Minecraft will reset the nickname.)
+### 💫 Basic features
+
+- **player.ip** → `string | null`: Player's IP address (automatically set)
+- **player.setBossBar(title, color, style, percent)** → `Promise<void>`: Create and assign a boss bar to a player
+- **player.setNameTagForPlayer(target, newName)** → `Promise<void>`: Set custom player name visible to specific players
+
+### 🎨 Boss Bar Customization
+
+**Available Colors:**
+- `BossBarColor.BLUE` (0) - Blue boss bar
+- `BossBarColor.GREEN` (1) - Green boss bar  
+- `BossBarColor.PINK` (2) - Pink boss bar
+- `BossBarColor.PURPLE` (3) - Purple boss bar
+- `BossBarColor.REBECCA_PURPLE` (4) - Rebecca purple boss bar
+- `BossBarColor.RED` (5) - Red boss bar
+- `BossBarColor.WHITE` (6) - White boss bar
+- `BossBarColor.YELLOW` (7) - Yellow boss bar
+
+**Available Styles:**
+- `BossBarStyle.SOLID` (0) - Solid progress bar
+- `BossBarStyle.SEGMENTED_6` (1) - 6 segments
+- `BossBarStyle.SEGMENTED_10` (2) - 10 segments
+- `BossBarStyle.SEGMENTED_12` (3) - 12 segments
+- `BossBarStyle.SEGMENTED_20` (4) - 20 segments
 
 ## 📦 Installation
 
 ### For Add-on Developers (JavaScript/TypeScript)
 
 1. Download the latest release from [GitHub Releases](https://github.com/Bedrock-Developpeur-Francophone/ScriptSDK/releases)
-2. Copy the following files to your add-on project in a `lib` folder:
-   - `ScriptSDK.ts`
-   - `ScriptSDK.js`
-   - `type.d.ts`
+2. Copy the following files to your add-on project in a `lib` folder.
 
 Your add-on structure should look like:
 ```
 scripts/
 ├── lib/
-│   ├── ScriptSDK.ts
 │   ├── ScriptSDK.js
-│   └── ScriptSDK.d.ts
+│   ├── ScriptSDK.d.ts
+│   └── src/...
 └── your-script.js
 ```
 
@@ -49,19 +67,25 @@ scripts/
 
 ### In your Bedrock Add-on
 
-After copying the SDK files to your `lib` folder, import it in your scripts:
+After copying the SDK files to your `lib` folder, import it in your main file:
 
 ```javascript
-import ScriptSDK, { BossBarColor, BossBarStyle } from '../lib/ScriptSDK';
-
-const ip = ScriptSDK.getIp(player);
-ScriptSDK.setBossBar(player, 'Your IP : '+ip, BossBarColor.YELLOW, BossBarStyle.SOLID);
-ScriptSDK.setPlayerNameForPlayer(target_steve, player_drewen, "DreWen15 (Only Visible by Steve)");
+import 'lib/ScriptSDK'; // Initialisation of the library
 ```
 
 ### TypeScript Support
 
-Full TypeScript support with type definitions included.
+Full TypeScript support with type definitions included:
+
+```typescript
+import { Player } from '@minecraft/server';
+import { BossBarColor, BossBarStyle } from 'lib/ScriptSDK';
+
+// TypeScript will provide autocomplete and type checking
+const setupPlayer = async (player: Player) => {
+    await player.setBossBar('Health Bar', BossBarColor.RED, BossBarStyle.SOLID, 80);
+};
+```
 
 ## 📝 License
 
