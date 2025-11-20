@@ -9,14 +9,22 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
-    "outDir": "./lib",
-    "rootDir": "./lib"
+    "outDir": "./dist/lib",
+    "rootDir": "./lib",
+    "emitDeclarationOnly": false,
+    "checkJs": false,
+    "allowSyntheticDefaultImports": true,
+    "preserveWatchOutput": true,
+    "noEmitOnError": false,
   },
   "include": [
-    "lib/**/*"
+    "lib/**/*.ts",
+    "lib/**/*.d.ts"
   ],
+  "ts-node": {
+    "files": true
+  },
   "exclude": [
-    "node_modules",
-    "**/*.js"
+    "node_modules"
   ]
 }

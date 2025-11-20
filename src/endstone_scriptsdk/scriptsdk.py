@@ -1,6 +1,7 @@
 from endstone.plugin import Plugin
 from colorama import Fore
 from endstone_scriptsdk.handler import EventHandler
+from endstone_scriptsdk.src.utils import sendCustomNameToPlayerForPlayer
 
 class ScriptSDK(Plugin):
     api_version = "0.10"
@@ -37,10 +38,24 @@ class ScriptSDK(Plugin):
         self.register_events(self)
         self.handler = EventHandler(self)
 
+        self.server.scheduler.run_task(self, self.clock, 0, 1)
+    
     def on_disable(self):
         for player, bar in self.handler.bossBars.items():
             bar.remove_all()
         self.logger.info(f'Unloaded !')
+
+    def clock(self):
+
+        for player_name, views in self.handler.nameTagCache.items():
+            for target_name, newName in views.items():
+                player = self.server.get_player(player_name)
+                target = self.server.get_player(target_name)
+                if player == None:
+                    del self.handler.nameTagCache[player_name]
+                if target == None:
+                    continue
+                sendCustomNameToPlayerForPlayer(target, player.runtime_id, newName)
     
     def on_command(self, sender, command, args):
 
