@@ -1,5 +1,5 @@
 from endstone import Player
-from endstone_scriptsdk.src.packets import SetActorDataPacket
+from endstone_scriptsdk.src.libs.packets import SetActorDataPacket
 from bedrock_protocol.packets import MinecraftPacketIds
 
 def sendCustomNameToPlayerForPlayer(viewver : Player, target_id : int, name: str):
