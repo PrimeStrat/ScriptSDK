@@ -18,7 +18,7 @@ class BossBar:
 
                 player = handler.plugin.server.get_player(playerName)
                 if not player:
-                    return handler.response(uuid, False, 404, 'player not found');
+                    return handler.response(uuid, False, 404, ['player not found']);
                 
                 colors = [
                     BarColor.BLUE,

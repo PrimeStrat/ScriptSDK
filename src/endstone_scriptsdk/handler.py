@@ -51,7 +51,7 @@ class EventHandler:
                 PlayerData.request(self, uuid, action, message)
 
             except Exception as e:
-                self.response(uuid, False, 500, str(e))
+                self.response(uuid, False, 500, [str(e)])
 
     @event_handler
     def on_damage(self, event : ActorDamageEvent):

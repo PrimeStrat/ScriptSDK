@@ -12,10 +12,10 @@ class ClientName:
                 result = re.match(r'^(.*);#;(.*);#;(.*)$', message, re.DOTALL)
                 target = handler.plugin.server.get_player(result[1])
                 if not target:
-                    return handler.response(uuid, False, 404, 'target not found');
+                    return handler.response(uuid, False, 404, ['target not found']);
                 player = handler.plugin.server.get_player(result[2])
                 if not player:
-                    return handler.response(uuid, False, 404, 'player not found');
+                    return handler.response(uuid, False, 404, ['player not found']);
 
                 if player.name in handler.nameTagCache:
                     handler.nameTagCache[player.name][target.name] = result[3]
@@ -33,10 +33,10 @@ class ClientName:
                 result = re.match(r'^(.*);#;(.*)$', message)
                 target = handler.plugin.server.get_player(result[1])
                 if not target:
-                    return handler.response(uuid, False, 404, 'target not found');
+                    return handler.response(uuid, False, 404, ['target not found']);
                 player = handler.plugin.server.get_player(result[2])
                 if not player:
-                    return handler.response(uuid, False, 404, 'player not found');
+                    return handler.response(uuid, False, 404, ['player not found']);
 
                 if player.name in handler.nameTagCache and target.name in handler.nameTagCache[player.name]:
                     del handler.nameTagCache[player.name][target.name]

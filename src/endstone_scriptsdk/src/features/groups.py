@@ -72,7 +72,7 @@ class Group:
                 rule = int(result[2])
 
                 if(Group.exist(name, handler.groups)):
-                    return handler.response(uuid, False, 409, 'a group with this name already exists')
+                    return handler.response(uuid, False, 409, ['a group with this name already exists'])
 
                 group = Group(name, rule, handler.plugin)
                 handler.groups.append(group)
@@ -89,7 +89,7 @@ class Group:
 
                 group : Group = Group.get(group_name, handler.groups)
                 if group is None:
-                    return handler.response(uuid, False, 404, 'group not found')
+                    return handler.response(uuid, False, 404, ['group not found'])
                 
                 if player_name not in group.players:
                     group.add_player(player_name)
@@ -111,7 +111,7 @@ class Group:
                 if player_name in group.players:
                     group.remove_player(player_name)
 
-                return handler.response(uuid, True, 200, 'player removed to the group')
+                return handler.response(uuid, True, 200, ['player removed to the group'])
 
             case 'deleteGroup':
                 '''
@@ -120,7 +120,7 @@ class Group:
                 
                 group : Group = Group.get(group_name, handler.groups)
                 if group is None:
-                    return self.response(uuid, False, 404, 'group not found')
+                    return self.response(uuid, False, 404, ['group not found'])
                 
                 handler.groups.remove(group)
                 return handler.response(uuid, True, 201, ['group deleted'])

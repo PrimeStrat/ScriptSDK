@@ -14,7 +14,7 @@ class PlayerData:
                 '''
                 player : Player = handler.plugin.server.get_player(message)
                 if not player:
-                    return handler.response(uuid, False, 404, 'player not found');
+                    return handler.response(uuid, False, 404, ['player not found']);
                 return handler.response(uuid, True, 200, [player.address.hostname])
             
             case 'getPlayerPing':
@@ -23,7 +23,7 @@ class PlayerData:
                 '''
                 player : Player = handler.plugin.server.get_player(message)
                 if not player:
-                    return handler.response(uuid, False, 404, 'player not found');
+                    return handler.response(uuid, False, 404, ['player not found']);
                 return handler.response(uuid, True, 200, [player.ping])
             
             case 'getPlayerXuid':
@@ -32,7 +32,7 @@ class PlayerData:
                 '''
                 player : Player = handler.plugin.server.get_player(message)
                 if not player:
-                    return handler.response(uuid, False, 404, 'player not found');
+                    return handler.response(uuid, False, 404, ['player not found']);
                 return handler.response(uuid, True, 200, [player.xuid])
             
             case 'getPlayerOS':
@@ -41,5 +41,5 @@ class PlayerData:
                 '''
                 player : Player = handler.plugin.server.get_player(message)
                 if not player:
-                    return handler.response(uuid, False, 404, 'player not found');
+                    return handler.response(uuid, False, 404, ['player not found']);
                 return handler.response(uuid, True, 200, [player.device_os])
