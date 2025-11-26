@@ -1,9 +1,13 @@
 import re
 from endstone.boss import BarColor, BarStyle
+import typing
+
+if typing.TYPE_CHECKING:
+    from endstone_scriptsdk.handler import EventHandler
 
 class BossBar:
     @staticmethod
-    def request(handler, uuid, action, message):
+    def request(handler : "EventHandler", uuid, action, message):
         match action:
             case 'setBossBar':
                 '''
@@ -53,3 +57,17 @@ class BossBar:
                 handler.bossBars[player] = bossBar
 
                 return handler.response(uuid, True, 201, ['bossBar created'])
+            case 'resetBossBar':
+                '''
+                    Body : playerName
+                '''
+
+                player = handler.plugin.server.get_player(message)
+                if not player:
+                    return handler.response(uuid, False, 404, ['player not found']);
+
+                if player in handler.bossBars:
+                    handler.bossBars[player].remove_all()
+                    del handler.bossBars[player]
+
+                return handler.response(uuid, True, 201, ['bossBar deleted'])

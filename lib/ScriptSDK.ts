@@ -21,6 +21,11 @@ declare module '@minecraft/server' {
         setBossBar(title: string, color: BossBarColor, style: BossBarStyle, percent: number): Promise<void>;
 
         /**
+         * Reset a boss bar to a player.
+         */
+        resetBossBar(player: Player): Promise<void>;
+
+        /**
          * Defines the target player name for the player.
          */
         setNameTagForPlayer(target: Player, newName: string): Promise<void>;
@@ -78,6 +83,14 @@ function loadPlayer(player: Player) {
 
     player.setBossBar = async (title, color, style, percent) => {
         const result = await ScriptSDK.send('setBossBar', [title, `${color}`, `${style}`, `${percent}`, `${player.name}`]);
+        if (!result?.success) {
+            if (result?.code == 404) throw new NotFoundException(prefix+result?.result);
+            throw new Error(prefix+result?.result);
+        }
+    }
+
+    player.resetBossBar = async (player) => {
+        const result = await ScriptSDK.send('resetBossBar', [`${player.name}`]);
         if (!result?.success) {
             if (result?.code == 404) throw new NotFoundException(prefix+result?.result);
             throw new Error(prefix+result?.result);
