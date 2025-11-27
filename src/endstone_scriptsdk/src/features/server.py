@@ -1,4 +1,4 @@
-import typing
+import typing, multiprocessing as mp
 from endstone_scriptsdk.src.libs.MCBEPing import ping_bedrock
 
 if typing.TYPE_CHECKING:
@@ -16,6 +16,13 @@ class ServerData:
                 ip = result[1]
                 port = int(result[2])
 
-                ping = ping_bedrock(ip, port)
+                def ping():
+                    try:
+                        ping = ping_bedrock(ip, port)
+                        handler.response(uuid, True, 200, [str(ping.ping), str(ping.edition), str(ping.gameMode), str(ping.mapName), str(ping.name), str(ping.players.online), str(ping.players.max), str(ping.serverId), str(ping.version)])
+                    except Exception as e:
+                        handler.response(uuid, False, 500, [str(e)])
                 
-                return handler.response(uuid, True, 200, [str(ping.ping), str(ping.edition), str(ping.gameMode), str(ping.mapName), str(ping.name), str(ping.players.online), str(ping.players.max), str(ping.serverId), str(ping.version)])
+                mp.Process(target=ping).start()
+
+                return None
