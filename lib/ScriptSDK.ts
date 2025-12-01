@@ -1,4 +1,4 @@
-import { ChatSendAfterEvent, InvalidContainerSlotError, PlayerBreakBlockAfterEvent, system, world } from "@minecraft/server";
+import { ChatSendAfterEvent, Entity, InvalidContainerSlotError, PlayerBreakBlockAfterEvent, system, world } from "@minecraft/server";
 import ScriptSDK from "./src/sdk";
 import { NotFoundException } from "./src/exceptions";
 import { Player } from '@minecraft/server';
@@ -40,24 +40,26 @@ declare module '@minecraft/server' {
         resetBossBar(): Promise<void>;
 
         /**
-         * Defines the target player name for the player.
+         * Get the player's ping
+         */
+        getPing(): Promise<number>;
+    }
+
+    interface Entity {
+        /**
+         * Defines the target entity name for the player.
          */
         setNameTagForPlayer(target: Player, newName: string): Promise<void>;
-
+        
         /**
-         * Get the name of the player visible to the targeted player.
+         * Get the name of the entity visible to the targeted player.
          */
         getNameTagByPlayer(target: Player): string;
 
         /**
-         * Reset the name of the player visible to the targeted player.
+         * Reset the name of the entity visible to the targeted player.
          */
         resetNameTagForPlayer(target: Player): Promise<void>;
-
-        /**
-         * Get the player's ping
-         */
-        getPing(): Promise<number>;
     }
 
     interface System {
@@ -138,34 +140,6 @@ function loadPlayer(player: Player) {
         }
     }
 
-    if (!caches.nameTagCache[player.name]) {
-        caches.nameTagCache[player.name] = {}
-    }
-    player.setNameTagForPlayer = async (target, newName) => {
-        caches.nameTagCache[player.name][target.name] = newName;
-        const result = await ScriptSDK.send('setPlayerNameForPlayer', [target.name, player.name, newName]);
-        if (!result?.success) {
-            if (result?.code == 404) throw new NotFoundException(prefix + result?.result[0]);
-            throw new Error(prefix + result?.result[0]);
-        }
-    }
-
-    player.getNameTagByPlayer = (target) => {
-        return caches.nameTagCache[player.name][target.name];
-    }
-
-    player.resetNameTagForPlayer = async (target) => {
-        if (Object.keys(caches.nameTagCache[player.name]).includes(target.name)) {
-            delete caches.nameTagCache[player.name][target.name];
-
-            const result = await ScriptSDK.send('resetPlayerNameForPlayer', [target.name, player.name]);
-            if (!result?.success) {
-                if (result?.code == 404) throw new NotFoundException(prefix + result?.result[0]);
-                throw new Error(prefix + result?.result[0]);
-            }
-        }
-    }
-
     player.getPing = async () => {
         const result = await ScriptSDK.send('getPlayerPing', [player.name]);
         if (!result?.success) {
@@ -176,13 +150,50 @@ function loadPlayer(player: Player) {
     }
 }
 
+function loadEntity(entity : Entity) {
+    if (!caches.nameTagCache[entity.id]) {
+        caches.nameTagCache[entity.id] = {}
+    }
+    entity.setNameTagForPlayer = async (target, newName) => {
+        caches.nameTagCache[entity.id][target.name] = newName;
+        const result = await ScriptSDK.send('setEntityNameForPlayer', [target.name, entity.id, newName]);
+        if (!result?.success) {
+            if (result?.code == 404) throw new NotFoundException(prefix + result?.result[0]);
+            throw new Error(prefix + result?.result[0]);
+        }
+    }
+
+    entity.getNameTagByPlayer = (target) => {
+        return caches.nameTagCache[entity.id][target.name];
+    }
+
+    entity.resetNameTagForPlayer = async (target) => {
+        if (Object.keys(caches.nameTagCache[entity.id]).includes(target.name)) {
+            delete caches.nameTagCache[entity.id][target.name];
+
+            const result = await ScriptSDK.send('resetEntityNameForPlayer', [target.name, entity.id, entity.nameTag]);
+            if (!result?.success) {
+                if (result?.code == 404) throw new NotFoundException(prefix + result?.result[0]);
+                throw new Error(prefix + result?.result[0]);
+            }
+        }
+    }
+}
+
 world.afterEvents.playerSpawn.subscribe(async (e) => {
-    const player = e.player;
-    loadPlayer(player);
+    loadPlayer(e.player);
+});
+
+world.afterEvents.entitySpawn.subscribe(async (e) => {
+    loadEntity(e.entity);
 });
 
 world.afterEvents.worldLoad.subscribe(async () => {
     world.getAllPlayers().forEach((p) => {
         loadPlayer(p);
+        loadEntity(p);
     });
+    world.getDimension('overworld').getEntities().forEach((e) => loadEntity(e));
+    world.getDimension('nether').getEntities().forEach((e) => loadEntity(e));
+    world.getDimension('the_end').getEntities().forEach((e) => loadEntity(e));
 });

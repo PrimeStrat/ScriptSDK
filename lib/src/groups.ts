@@ -1,6 +1,6 @@
 import { Player, SetBannerDetailsFunction, system } from "@minecraft/server";
-import { GroupRule } from "./enums";
-import ScriptSDK from './sdk';
+import { GroupRule } from "../../dist/lib/src/enums";
+import ScriptSDK from '../../dist/lib/src/sdk';
 import { prefix } from "../ScriptSDK";
 
 export class Group {
