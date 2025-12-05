@@ -48,12 +48,16 @@ class ScriptSDK(Plugin):
 
     def clock(self):
 
-        for runtime_id, views in self.handler.nameTagCache.items():
+        for id, views in self.handler.nameTagCache.items():
             for target_name, newName in views.items():
                 target = self.server.get_player(target_name)
                 if target == None:
                     continue
-                sendCustomNameToPlayerForEntity(target, int(runtime_id), newName)
+                for entity in self.server.level.actors:
+                    if entity.id == int(id):
+                        sendCustomNameToPlayerForEntity(target, int(entity.runtime_id), newName)
+                        break
+                
     
     def on_command(self, sender, command, args):
 
