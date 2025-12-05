@@ -30,7 +30,7 @@ class EntityData:
                 '''
                     Body: targetName;#;id;#;originalName
                 '''
-                result = handler.deserializer(message, 2)
+                result = handler.deserializer(message, 3)
                 target = handler.plugin.server.get_player(result[1])
                 if not target:
                     return handler.response(uuid, False, 404, ['target not found']);
